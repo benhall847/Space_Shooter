@@ -38,6 +38,15 @@ class unit(pygame.sprite.Sprite):
         self.y = y
         pygame.sprite.Sprite.__init__(self)
 
+class startButton(unit):
+    def __init__(self, x, y):
+        unit.__init__(self, x, y)
+        self.image = pygame.image.load("/Users/mothership/Documents/GitHub/myGame/Space_images/STARTBUTTON.png").convert()
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+    def display(self):
+        self.draw(screen)
 
 class enemyBullet(unit, pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -93,6 +102,7 @@ class enemy(unit, pygame.sprite.Sprite):
     def display(self):
             screen.blit(self.image, (self.x, self.y))
 
+        # Game initialization
 
 def main():
     # declare the size of the canvas
@@ -101,20 +111,34 @@ def main():
     height = 500
     blue_color = (0, 0, 0)
     pygame.init()
+    startscreen = pygame.image.load("/Users/mothership/Documents/GitHub/myGame/Space_images/SpaceShooterStartpage.png").convert_alpha()
     screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption('Ball Example')
+    pygame.display.set_caption('Space Shooter')
     bullets = []
     enemybullets = []
     enemy_fighters = []
+    player_list = []
+    clicked_sprites = []
+    startgroup = pygame.sprite.Group()
+    MyStart = startButton(200, 300)
+    startlist = []
+    startlist.append(MyStart)
+    
+    startgroup.add(MyStart)
     rdmbullet = 0
     counter = 60
     screen = pygame.display.set_mode((width, height))
     
     x = 10
-    for z in range(0, 200, 80):
-        for y in range(0, 450, 80):
-            enemy_fighters.append(enemy(y, z))
-        
+
+    def level1():
+        for z in range(0, 200, 80):
+            for y in range(0, 450, 80):
+                enemy_fighters.append(enemy(y, z))
+        player1 = Hero(200, 400)
+        playergroup.add(player1)
+        player_list.append(player1)
+    
     for i in range(50):
         rndm_y = randint(10, 490)
         rndm_x = randint(10, 490)
@@ -122,34 +146,33 @@ def main():
         rndm_spd = randint(1, 3)
         ball_list.append(Ball(rndm_y, rndm_x, rndm_spd, rndm_size))
 
-    player1 = Hero(200, 400)
-    playergroup.add(player1)
-    # Game initialization
+
+
+
     stop_game = False
-    # for i in range(random_int):
-    #     random_location = randint(10, 490)
-    #     random_size = randint(1, 15)
-    #     random_speed = randint(2, 15)
-    #     ball_list.append(Ball(random_location, 50, random_speed, random_size))
-
-
-
     while not stop_game:
         for event in pygame.event.get():
-            random_int = randint(8, 30)
-            if event.type == pygame.KEYDOWN:
-                if event.key == KEY_LEFT:
-                    player1.lspeed = -4
-                elif event.key == KEY_RIGHT:
-                    player1.rspeed = 4
-                if event.key == KEY_UP:
-                    if player1.lives > 0:
-                        bullets.append(bullet(player1.rect.x + 28, player1.rect.y + 20))
-            if event.type == pygame.KEYUP:
-                if event.key == KEY_LEFT:
-                    player1.lspeed = 0
-                elif event.key == KEY_RIGHT:
-                    player1.rspeed = 0
+            if event.type == pygame.MOUSEBUTTONDOWN:
+            # Set the x, y postions of the mouse click
+                x, y = event.pos
+                if MyStart.rect.collidepoint(x, y):
+                    startgroup.remove(MyStart)
+                    level1()
+                    del startlist[0]
+            for ea_player in player_list:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == KEY_LEFT:
+                        ea_player.lspeed = -4
+                    elif event.key == KEY_RIGHT:
+                        ea_player.rspeed = 4
+                    if event.key == KEY_UP:
+                        if ea_player.lives > 0:
+                            bullets.append(bullet(ea_player.rect.x + 28, ea_player.rect.y + 20))
+                if event.type == pygame.KEYUP:
+                    if event.key == KEY_LEFT:
+                        ea_player.lspeed = 0
+                    elif event.key == KEY_RIGHT:
+                        ea_player.rspeed = 0
 
             if event.type == pygame.QUIT:
                 # if they closed the window, set stop_game to True
@@ -179,7 +202,7 @@ def main():
         
 
         if counter == 0:
-            counter = 60
+            counter = 90
             rdmbullet = randint(1, 5)
             if len(enemy_fighters) > 0:
                 for i in range(rdmbullet):
@@ -190,12 +213,18 @@ def main():
         for ea_bullet in enemybullets:
 
             if len(enemybullets) > 0:
-                hit = pygame.sprite.spritecollide(ea_bullet, playergroup, False)
-                if hit:
-                    print("hit")
-                    player1.lives -= 1
-                    enemybulletgroup.remove(ea_bullet)
-                    del enemybullets[enemybullets.index(ea_bullet)]
+                for ea_player in player_list:
+                    for ea_bullet in enemybullets:
+                        if ea_player.lives > 0:
+                            hit = pygame.sprite.collide_rect(ea_player, ea_bullet)
+                            if hit:
+                                print("hit")
+                                ea_player.lives -= 1
+                                enemybulletgroup.remove(ea_bullet)
+                                del enemybullets[enemybullets.index(ea_bullet)]
+                                if ea_player.lives <= 0:
+                                    playergroup.remove(ea_player)
+                                    del player_list[player_list.index(ea_player)]
         for ea_enemy in enemy_fighters:
             ea_enemy.y -= ea_enemy.yspeed
             ea_enemy.x -= ea_enemy.xspeed
@@ -205,47 +234,40 @@ def main():
             ea_bullet.rect.y += ea_bullet.speed
             if ea_bullet.y >= width + 10:
                 ea_bullet.dead = True
+        for ea_player in player_list:
+            if ea_player.lives > 0:
+                ea_player.rect.x += (ea_player.rspeed + ea_player.lspeed)
 
-        player1.rect.x += (player1.rspeed + player1.lspeed)
-
-        if player1.rect.x <= -20:
-            player1.lspeed = 0
-            player1.rect.x = -10
-        if player1.rect.x >= (width - 100):
-            player1.rspeed = 0
-            player1.rect.x = (width - 105)
+            if ea_player.rect.x <= -20:
+                ea_player.lspeed = 0
+                ea_player.rect.x = -10
+            if ea_player.rect.x >= (width - 100):
+                ea_player.rspeed = 0
+                ea_player.rect.x = (width - 105)
 
         for ball in ball_list:
             ball.update(width, height)
-
-        
         
         
         # Draw background
         screen.fill(blue_color)
+        for ball in ball_list:
+            ball.display(screen)
 
         # Game display
 
-        for ball in ball_list:
-            ball.display(screen)
-        if player1.lives > 0:
-            playergroup.draw(screen)
-        else:
-            pass
+        # background
 
-        # for ea_bullet in bullets:
-        #     if not ea_bullet.dead:
-        #         ea_bullet.display()
-        #     else:
-        #         del ea_bullet
+        playergroup.draw(screen)
+        # else:
+        if len(startlist) > 0:
+            screen.blit(startscreen, (0,0))
+        startgroup.draw(screen)
+
         bulletgroup.draw(screen)
         enemybulletgroup.draw(screen)
         enemygroup.draw(screen)
-        # for ea_enemy in enemy_fighters:
-        #     # if not hit:
-        #     #     ea_enemy.display()
-        #     if:
-        #         del ea_enemy
+
         pygame.display.update()
 
     pygame.quit()
