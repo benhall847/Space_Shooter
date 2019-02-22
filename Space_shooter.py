@@ -32,16 +32,29 @@ bulletgroup = pygame.sprite.Group()
 enemygroup = pygame.sprite.Group()
 enemybulletgroup = pygame.sprite.Group()
 playergroup = pygame.sprite.Group()
+gameovergroup = pygame.sprite.Group()
+
 class unit(pygame.sprite.Sprite):
     def __init__(self, x, y):
         self.x = x
         self.y = y
         pygame.sprite.Sprite.__init__(self)
 
+
 class startButton(unit):
     def __init__(self, x, y):
         unit.__init__(self, x, y)
         self.image = pygame.image.load("/Users/mothership/Documents/GitHub/myGame/Space_images/STARTBUTTON.png").convert()
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+    def display(self):
+        self.draw(screen)
+
+class gameover(unit):
+    def __init__(self, x, y):
+        unit.__init__(self, x, y)
+        self.image = pygame.image.load("/Users/mothership/Documents/GitHub/myGame/Space_images/GAMEOVER.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -89,11 +102,12 @@ class bullet(unit):
 
 
 class enemy(unit, pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, health):
         unit.__init__(self, x, y)
         self.dead = False
         self.xspeed = 0
         self.yspeed = 0
+        self.life = health
         self.image = pygame.image.load("/Users/mothership/Documents/Tiled_stuff/MyEnemy.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -111,7 +125,11 @@ def main():
     height = 500
     blue_color = (0, 0, 0)
     pygame.init()
-    startscreen = pygame.image.load("/Users/mothership/Documents/GitHub/myGame/Space_images/SpaceShooterStartpage.png").convert_alpha()
+    gameoverlist = []
+    Mygameover = gameover(0,0)
+    gameovergroup.add(Mygameover)
+    gameoverlist.append(Mygameover)
+    startscreen = pygame.image.load("/Users/mothership/Documents/Github/myGame/Space_images/SpaceShooterStartpage.png")
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption('Space Shooter')
     bullets = []
@@ -123,7 +141,7 @@ def main():
     MyStart = startButton(200, 300)
     startlist = []
     startlist.append(MyStart)
-    
+    level = 0
     startgroup.add(MyStart)
     rdmbullet = 0
     counter = 60
@@ -132,12 +150,18 @@ def main():
     x = 10
 
     def level1():
+        level = 1
         for z in range(0, 200, 80):
             for y in range(0, 450, 80):
-                enemy_fighters.append(enemy(y, z))
+                enemy_fighters.append(enemy(y, z, 1))
         player1 = Hero(200, 400)
         playergroup.add(player1)
         player_list.append(player1)
+
+    def level2():
+        for z in range(0, 200, 80):
+            for y in range(0, 450, 80):
+                enemy_fighters.append(enemy(y, z, 2))
     
     for i in range(50):
         rndm_y = randint(10, 490)
@@ -155,10 +179,12 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
             # Set the x, y postions of the mouse click
                 x, y = event.pos
-                if MyStart.rect.collidepoint(x, y):
-                    startgroup.remove(MyStart)
-                    level1()
-                    del startlist[0]
+                if len(startlist) > 0:
+                    if MyStart.rect.collidepoint(x, y):
+                        startgroup.remove(MyStart)
+                        level1()
+                        level += 1
+                        del startlist[startlist.index(MyStart)]
             for ea_player in player_list:
                 if event.type == pygame.KEYDOWN:
                     if event.key == KEY_LEFT:
@@ -197,8 +223,10 @@ def main():
                     if bullethit:
                         bulletgroup.remove(ea_bullet)
                         del bullets[bullets.index(ea_bullet)]
-                enemygroup.remove(ea_enemy)
-                del enemy_fighters[enemy_fighters.index(ea_enemy)]
+                ea_enemy.life -= 1
+                if ea_enemy.life == 0:
+                    enemygroup.remove(ea_enemy)
+                    del enemy_fighters[enemy_fighters.index(ea_enemy)]
         
 
         if counter == 0:
@@ -245,6 +273,9 @@ def main():
                 ea_player.rspeed = 0
                 ea_player.rect.x = (width - 105)
 
+        if len(enemy_fighters) == 0 and level == 1:
+            level2()
+            level += 1
         for ball in ball_list:
             ball.update(width, height)
         
@@ -259,7 +290,7 @@ def main():
         # background
 
         playergroup.draw(screen)
-        # else:
+
         if len(startlist) > 0:
             screen.blit(startscreen, (0,0))
         startgroup.draw(screen)
@@ -268,6 +299,8 @@ def main():
         enemybulletgroup.draw(screen)
         enemygroup.draw(screen)
 
+        if len(player_list) == 0 and len(startlist) == 0:
+            gameovergroup.draw(screen)
         pygame.display.update()
 
     pygame.quit()
