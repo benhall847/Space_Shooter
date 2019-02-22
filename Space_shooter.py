@@ -99,19 +99,38 @@ class bullet(unit):
     def display(self):
         self.draw(screen)
 
-
-
-class enemy(unit, pygame.sprite.Sprite):
+class enemies(unit):
     def __init__(self, x, y, health):
         unit.__init__(self, x, y)
         self.dead = False
-        self.xspeed = 0
+        self.xspeed = 1
         self.yspeed = 0
         self.life = health
+
+class enemy2(enemies):
+    def __init__(self, x, y, health):
+        enemies.__init__(self, x, y, health)
+        self.image = pygame.image.load("/Users/mothership/Documents/GitHub/myGame/Space_images/enemy2.png")
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+class enemy(enemies):
+    def __init__(self, x, y, health):
+        enemies.__init__(self, x, y, health)
         self.image = pygame.image.load("/Users/mothership/Documents/Tiled_stuff/MyEnemy.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+class enemy3(enemies):
+    def __init__(self, x, y, health):
+        enemies.__init__(self, x, y, health)
+        self.image = pygame.image.load("/Users/mothership/Documents/GitHub/myGame/Space_images/enemy3.png")
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
 
     def display(self):
             screen.blit(self.image, (self.x, self.y))
@@ -145,8 +164,13 @@ def main():
     startgroup.add(MyStart)
     rdmbullet = 0
     counter = 60
-    screen = pygame.display.set_mode((width, height))
     
+    font = pygame.font.Font(None, 30)
+    screen = pygame.display.set_mode((width, height))
+    green = (0, 255, 0)
+    textblock = font.render("", True, (green))
+
+
     x = 10
 
     def level1():
@@ -161,7 +185,13 @@ def main():
     def level2():
         for z in range(0, 200, 80):
             for y in range(0, 450, 80):
-                enemy_fighters.append(enemy(y, z, 2))
+                enemy_fighters.append(enemy2(y, z, 2))
+    
+    def level3():
+        for z in range(0, 160, 80):
+            for y in range (0, 450, 80):
+                enemy_fighters.append(enemy3(y, z, 3))
+
     
     for i in range(50):
         rndm_y = randint(10, 490)
@@ -253,8 +283,17 @@ def main():
                                 if ea_player.lives <= 0:
                                     playergroup.remove(ea_player)
                                     del player_list[player_list.index(ea_player)]
+        
         for ea_enemy in enemy_fighters:
-            ea_enemy.y -= ea_enemy.yspeed
+            if ea_enemy.x <= -10:
+                for ea_enemy in enemy_fighters:
+                    ea_enemy.xspeed = -1
+            if ea_enemy.x >= (width - 50):
+                for ea_enemy in enemy_fighters:
+                    ea_enemy.xspeed = 1
+        
+        for ea_enemy in enemy_fighters:
+            ea_enemy.rect.x -= ea_enemy.xspeed
             ea_enemy.x -= ea_enemy.xspeed
         
         for ea_bullet in enemybullets:
@@ -262,6 +301,7 @@ def main():
             ea_bullet.rect.y += ea_bullet.speed
             if ea_bullet.y >= width + 10:
                 ea_bullet.dead = True
+        
         for ea_player in player_list:
             if ea_player.lives > 0:
                 ea_player.rect.x += (ea_player.rspeed + ea_player.lspeed)
@@ -276,6 +316,9 @@ def main():
         if len(enemy_fighters) == 0 and level == 1:
             level2()
             level += 1
+        if len(enemy_fighters) == 0 and level == 2:
+            level3()
+            level += 1
         for ball in ball_list:
             ball.update(width, height)
         
@@ -288,7 +331,7 @@ def main():
         # Game display
 
         # background
-
+        
         playergroup.draw(screen)
 
         if len(startlist) > 0:
@@ -301,6 +344,10 @@ def main():
 
         if len(player_list) == 0 and len(startlist) == 0:
             gameovergroup.draw(screen)
+        if len(player_list) > 0:
+            myphrase = ("Lives: %d" % player_list[0].lives)
+            textblock = font.render(myphrase, True, (green))
+            screen.blit(textblock,(20,480))
         pygame.display.update()
 
     pygame.quit()
