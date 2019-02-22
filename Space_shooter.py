@@ -135,6 +135,7 @@ def main():
     ball_list = []
     width = 500
     height = 500
+    enemyspeed = 1
     screen = pygame.display.set_mode((width, height))
     bulletgroup = pygame.sprite.Group()
     enemygroup = pygame.sprite.Group()
@@ -261,14 +262,18 @@ def main():
             if len(enemy_fighters) < 8:
                 counter = 60
             if len(enemy_fighters) < 5:
-                counter = 40
+                counter = 50
             if len(enemy_fighters) < 2:
-                counter = 30
+                counter = 40
             if len(enemy_fighters) == 1:
                 counter = 20
+            if len(enemy_fighters) < rdmbullet:
+                rdmbullet = randint(0, len(enemy_fighters))
             if len(enemy_fighters) > 0:
                 for i in range(rdmbullet):
                     rdmindex = randint(0, (len(enemy_fighters) - 1))
+                    if len(enemy_fighters) == 1:
+                        rdmindex = 0
                     enemybullets.append(enemyBullet( enemy_fighters[rdmindex].x + 35, enemy_fighters[rdmindex].y + 35))
                 rdmbullet = 0
 
@@ -287,13 +292,19 @@ def main():
                                     playergroup.remove(ea_player)
                                     del player_list[player_list.index(ea_player)]
         
+        if len(enemy_fighters) == 8:
+            enemyspeed = 2
+        if len(enemy_fighters) == 4:
+            enemyspeed = 4
+        if len(enemy_fighters) == 1:
+            enemyspeed = 6
         for ea_enemy in enemy_fighters:
             if ea_enemy.x <= -10:
                 for ea_enemy in enemy_fighters:
-                    ea_enemy.xspeed = -1
+                    ea_enemy.xspeed = -(enemyspeed)
             if ea_enemy.x >= (width - 50):
                 for ea_enemy in enemy_fighters:
-                    ea_enemy.xspeed = 1
+                    ea_enemy.xspeed = (enemyspeed)
         
         for ea_enemy in enemy_fighters:
             ea_enemy.rect.x -= ea_enemy.xspeed
@@ -319,11 +330,15 @@ def main():
         if len(enemy_fighters) == 0 and level == 1:
             level2()
             level += 1
-            player_list[0].lives += 1
+            if len(player_list) > 0:
+                player_list[0].lives += 1
+            enemyspeed = 1
         if len(enemy_fighters) == 0 and level == 2:
             level3()
             level += 1
-            player_list[0].lives += 1
+            if len(player_list) > 0:
+                player_list[0].lives += 1
+            enemyspeed = 1
         for ball in ball_list:
             ball.update(width, height)
         
