@@ -2,10 +2,6 @@ import pygame
 from random import randint
 import random
 import time
-KEY_UP = 273
-KEY_DOWN = 274
-KEY_LEFT = 276
-KEY_RIGHT = 275
 
 class Ball:
     def __init__(self, x, y, speed, radius):
@@ -25,14 +21,7 @@ class Ball:
             self.x = 0
         if self.y > height:
             self.y = 0
-width = 500
-height = 500
-screen = pygame.display.set_mode((width, height))
-bulletgroup = pygame.sprite.Group()
-enemygroup = pygame.sprite.Group()
-enemybulletgroup = pygame.sprite.Group()
-playergroup = pygame.sprite.Group()
-gameovergroup = pygame.sprite.Group()
+
 
 class unit(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -61,7 +50,7 @@ class gameover(unit):
     def display(self):
         self.draw(screen)
 
-class enemyBullet(unit, pygame.sprite.Sprite):
+class enemyBullet(unit):
     def __init__(self, x, y):
         unit.__init__(self, x, y)
         self.dead = False
@@ -139,10 +128,20 @@ class enemy3(enemies):
 
 def main():
     # declare the size of the canvas
+    KEY_UP = 273
+    KEY_DOWN = 274
+    KEY_LEFT = 276
+    KEY_RIGHT = 275
     ball_list = []
     width = 500
     height = 500
-    blue_color = (0, 0, 0)
+    screen = pygame.display.set_mode((width, height))
+    bulletgroup = pygame.sprite.Group()
+    enemygroup = pygame.sprite.Group()
+    enemybulletgroup = pygame.sprite.Group()
+    playergroup = pygame.sprite.Group()
+    gameovergroup = pygame.sprite.Group()
+    black_color = (0, 0, 0)
     pygame.init()
     gameoverlist = []
     Mygameover = gameover(0,0)
@@ -155,14 +154,12 @@ def main():
     enemybullets = []
     enemy_fighters = []
     player_list = []
-    clicked_sprites = []
     startgroup = pygame.sprite.Group()
     MyStart = startButton(200, 300)
     startlist = []
     startlist.append(MyStart)
     level = 0
     startgroup.add(MyStart)
-    rdmbullet = 0
     counter = 60
     
     font = pygame.font.Font(None, 30)
@@ -171,7 +168,6 @@ def main():
     textblock = font.render("", True, (green))
 
 
-    x = 10
 
     def level1():
         level = 1
@@ -193,7 +189,7 @@ def main():
                 enemy_fighters.append(enemy3(y, z, 3))
 
     
-    for i in range(50):
+    for i in range(100):
         rndm_y = randint(10, 490)
         rndm_x = randint(10, 490)
         rndm_size = randint(1, 2)
@@ -262,6 +258,14 @@ def main():
         if counter == 0:
             counter = 90
             rdmbullet = randint(1, 5)
+            if len(enemy_fighters) < 8:
+                counter = 60
+            if len(enemy_fighters) < 5:
+                counter = 40
+            if len(enemy_fighters) < 2:
+                counter = 30
+            if len(enemy_fighters) == 1:
+                counter = 20
             if len(enemy_fighters) > 0:
                 for i in range(rdmbullet):
                     rdmindex = randint(0, (len(enemy_fighters) - 1))
@@ -276,7 +280,6 @@ def main():
                         if ea_player.lives > 0:
                             hit = pygame.sprite.collide_rect(ea_player, ea_bullet)
                             if hit:
-                                print("hit")
                                 ea_player.lives -= 1
                                 enemybulletgroup.remove(ea_bullet)
                                 del enemybullets[enemybullets.index(ea_bullet)]
@@ -316,15 +319,17 @@ def main():
         if len(enemy_fighters) == 0 and level == 1:
             level2()
             level += 1
+            player_list[0].lives += 1
         if len(enemy_fighters) == 0 and level == 2:
             level3()
             level += 1
+            player_list[0].lives += 1
         for ball in ball_list:
             ball.update(width, height)
         
         
         # Draw background
-        screen.fill(blue_color)
+        screen.fill(black_color)
         for ball in ball_list:
             ball.display(screen)
 
