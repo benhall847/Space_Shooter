@@ -125,19 +125,18 @@ class enemy3(enemies):
             screen.blit(self.image, (self.x, self.y))
 
         # Game initialization
-
 def main():
     # declare the size of the canvas
     pygame.init()
     width = 500
     height = 500
-    pygame.display.set_caption('Space Shooter')
-    startscreen = pygame.image.load("/Users/mothership/Documents/Github/myGame/Space_images/SpaceShooterStartpage.png")
-    screen = pygame.display.set_mode((width, height))
     KEY_UP = 273
     KEY_DOWN = 274
     KEY_LEFT = 276
     KEY_RIGHT = 275
+    pygame.display.set_caption('Space Shooter')
+    startscreen = pygame.image.load("/Users/mothership/Documents/Github/myGame/Space_images/SpaceShooterStartpage.png")
+    screen = pygame.display.set_mode((width, height))
     ball_list = []
     gameoverlist = []
     bullets = []
@@ -268,10 +267,10 @@ def main():
             if len(enemy_fighters) == 1:
                 counter = 20
             if len(enemy_fighters) < rdmbullet:
-                rdmbullet = randint(0, len(enemy_fighters))
+                rdmbullet = randint(1, len(enemy_fighters))
             if len(enemy_fighters) > 0:
                 for i in range(rdmbullet):
-                    rdmindex = randint(0, (len(enemy_fighters) - 1))
+                    rdmindex = randint(0, (len(enemy_fighters) -1))
                     if len(enemy_fighters) == 1:
                         rdmindex = 0
                     enemybullets.append(enemyBullet( enemy_fighters[rdmindex].x + 35, enemy_fighters[rdmindex].y + 35))
@@ -365,7 +364,7 @@ def main():
         bulletgroup.draw(screen)
         enemybulletgroup.draw(screen)
         enemygroup.draw(screen)
-
+        print(counter)
         if len(player_list) == 0 and len(startlist) == 0:
             gameovergroup.draw(screen)
         if len(player_list) > 0:
