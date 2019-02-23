@@ -128,45 +128,44 @@ class enemy3(enemies):
 
 def main():
     # declare the size of the canvas
+    pygame.init()
+    width = 500
+    height = 500
+    pygame.display.set_caption('Space Shooter')
+    startscreen = pygame.image.load("/Users/mothership/Documents/Github/myGame/Space_images/SpaceShooterStartpage.png")
+    screen = pygame.display.set_mode((width, height))
     KEY_UP = 273
     KEY_DOWN = 274
     KEY_LEFT = 276
     KEY_RIGHT = 275
     ball_list = []
-    width = 500
-    height = 500
+    gameoverlist = []
+    bullets = []
+    enemybullets = []
+    enemy_fighters = []
+    player_list = []
+    startlist = []
     enemyspeed = 1
+    level = 0
+    counter = 0
+    black_color = (0, 0, 0)
+    font = pygame.font.Font(None, 30)
+    MyStart = startButton(200, 300)
+    Mygameover = gameover(0,0)
     screen = pygame.display.set_mode((width, height))
     bulletgroup = pygame.sprite.Group()
     enemygroup = pygame.sprite.Group()
     enemybulletgroup = pygame.sprite.Group()
     playergroup = pygame.sprite.Group()
     gameovergroup = pygame.sprite.Group()
-    black_color = (0, 0, 0)
-    pygame.init()
-    gameoverlist = []
-    Mygameover = gameover(0,0)
+    startgroup = pygame.sprite.Group()
     gameovergroup.add(Mygameover)
     gameoverlist.append(Mygameover)
-    startscreen = pygame.image.load("/Users/mothership/Documents/Github/myGame/Space_images/SpaceShooterStartpage.png")
-    screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption('Space Shooter')
-    bullets = []
-    enemybullets = []
-    enemy_fighters = []
-    player_list = []
-    startgroup = pygame.sprite.Group()
-    MyStart = startButton(200, 300)
-    startlist = []
     startlist.append(MyStart)
-    level = 0
     startgroup.add(MyStart)
-    counter = 60
-    
-    font = pygame.font.Font(None, 30)
     screen = pygame.display.set_mode((width, height))
-    green = (0, 255, 0)
-    textblock = font.render("", True, (green))
+    textblock = font.render("", True, (0, 255, 0))
+    
 
 
 
@@ -211,6 +210,7 @@ def main():
                         startgroup.remove(MyStart)
                         level1()
                         level += 1
+                        counter = 120
                         del startlist[startlist.index(MyStart)]
             for ea_player in player_list:
                 if event.type == pygame.KEYDOWN:
@@ -292,6 +292,7 @@ def main():
                                     playergroup.remove(ea_player)
                                     del player_list[player_list.index(ea_player)]
         
+        # enemy speed settings
         if len(enemy_fighters) == 8:
             enemyspeed = 2
         if len(enemy_fighters) == 4:
@@ -316,6 +317,7 @@ def main():
             if ea_bullet.y >= width + 10:
                 ea_bullet.dead = True
         
+        # blocks player from leaving
         for ea_player in player_list:
             if ea_player.lives > 0:
                 ea_player.rect.x += (ea_player.rspeed + ea_player.lspeed)
@@ -330,12 +332,14 @@ def main():
         if len(enemy_fighters) == 0 and level == 1:
             level2()
             level += 1
+            counter = 120
             if len(player_list) > 0:
                 player_list[0].lives += 1
             enemyspeed = 1
         if len(enemy_fighters) == 0 and level == 2:
             level3()
             level += 1
+            counter = 120
             if len(player_list) > 0:
                 player_list[0].lives += 1
             enemyspeed = 1
@@ -366,7 +370,7 @@ def main():
             gameovergroup.draw(screen)
         if len(player_list) > 0:
             myphrase = ("Lives: %d" % player_list[0].lives)
-            textblock = font.render(myphrase, True, (green))
+            textblock = font.render(myphrase, True, (0,255,0))
             screen.blit(textblock,(20,480))
         pygame.display.update()
 
