@@ -13,7 +13,6 @@ class Ball:
     def display(self, screen):
         pygame.draw.circle(screen, (255, 255, 255), (self.x, self.y), self.radius)
 
-
     def update(self, width, height):
         self.x = self.x
         self.y += self.speed
@@ -39,6 +38,17 @@ class startButton(unit):
         self.rect.y = y
     def display(self):
         self.draw(screen)
+
+class RetryButton(unit):
+    def __init__(self, x, y):
+        unit.__init__(self,x, y)
+        self.image = pygame.image.load("/Users/mothership/Documents/GitHub/myGame/Space_images/TRYAGAIN.png").convert()
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+    def display(self):
+        self.draw(screen)
+
 
 class gameover(unit):
     def __init__(self, x, y):
@@ -144,12 +154,15 @@ def main():
     enemy_fighters = []
     player_list = []
     startlist = []
+    retrylist = []
     enemyspeed = 1
     level = 0
     counter = 0
+    reset = 0
     black_color = (0, 0, 0)
     font = pygame.font.Font(None, 30)
     MyStart = startButton(200, 300)
+    MyRetry = RetryButton(150, 300)
     Mygameover = gameover(0,0)
     screen = pygame.display.set_mode((width, height))
     bulletgroup = pygame.sprite.Group()
@@ -158,14 +171,14 @@ def main():
     playergroup = pygame.sprite.Group()
     gameovergroup = pygame.sprite.Group()
     startgroup = pygame.sprite.Group()
+    retrygroup = pygame.sprite.Group()
     gameovergroup.add(Mygameover)
     gameoverlist.append(Mygameover)
-    startlist.append(MyStart)
     startgroup.add(MyStart)
+    startlist.append(MyStart)
     screen = pygame.display.set_mode((width, height))
     textblock = font.render("", True, (0, 255, 0))
     
-
 
 
     def level1():
@@ -179,7 +192,7 @@ def main():
 
     def level2():
         for z in range(0, 200, 80):
-            for y in range(0, 450, 80):
+            for y in range(0, 400, 100):
                 enemy_fighters.append(enemy2(y, z, 2))
     
     def level3():
@@ -211,6 +224,11 @@ def main():
                         level += 1
                         counter = 120
                         del startlist[startlist.index(MyStart)]
+                if len(retrylist) > 0:
+                    if MyRetry.rect.collidepoint(x, y):
+                        retrygroup.remove(MyRetry)
+                        retrylist.pop()
+                        reset = 1
             for ea_player in player_list:
                 if event.type == pygame.KEYDOWN:
                     if event.key == KEY_LEFT:
@@ -232,6 +250,18 @@ def main():
                 stop_game = True
         # Game logic
         counter -= 1
+
+        if reset == 1:
+            for ea_enemy in enemy_fighters:
+                enemygroup.remove(ea_enemy)
+            enemy_fighters = []
+            level = 1
+            counter = 120
+            enemyspeed = 1
+            level1()
+            reset = 0
+
+
 
         for ea_bullet in bullets:
             bulletgroup.add(ea_bullet)
@@ -263,8 +293,6 @@ def main():
                     rdmbullet = randint(1, len(enemy_fighters))
                 for i in range(rdmbullet):
                     rdmindex = randint(0, (len(enemy_fighters) -1))
-                    if len(enemy_fighters) == 1:
-                        rdmindex = 0
                     enemybullets.append(enemyBullet( enemy_fighters[rdmindex].x + 35, enemy_fighters[rdmindex].y + 35))
                 rdmbullet = 0
             counter = 90
@@ -396,6 +424,11 @@ def main():
         enemygroup.draw(screen)
         if len(player_list) == 0 and len(startlist) == 0:
             gameovergroup.draw(screen)
+            retrygroup.draw(screen)
+
+            retrygroup.add(MyRetry)
+            retrylist.append(MyRetry)
+
         if len(player_list) > 0:
             myphrase = ("Lives: %d" % player_list[0].lives)
             textblock = font.render(myphrase, True, (0,255,0))
