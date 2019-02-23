@@ -54,7 +54,7 @@ class enemyBullet(unit):
     def __init__(self, x, y):
         unit.__init__(self, x, y)
         self.dead = False
-        self.speed = 10
+        self.speed = 8
         self.image = pygame.image.load("/Users/mothership/Documents/Tiled_stuff/enemybullet.png")
         self.dead = False
         self.rect = self.image.get_rect()
@@ -171,7 +171,7 @@ def main():
     def level1():
         level = 1
         for z in range(0, 200, 80):
-            for y in range(0, 450, 80):
+            for y in range(0, 400, 80):
                 enemy_fighters.append(enemy(y, z, 1))
         player1 = Hero(200, 400)
         playergroup.add(player1)
@@ -249,15 +249,25 @@ def main():
                     if bullethit:
                         bulletgroup.remove(ea_bullet)
                         del bullets[bullets.index(ea_bullet)]
+                        
                 ea_enemy.life -= 1
                 if ea_enemy.life == 0:
                     enemygroup.remove(ea_enemy)
                     del enemy_fighters[enemy_fighters.index(ea_enemy)]
-        
+
 
         if counter == 0:
-            counter = 90
             rdmbullet = randint(1, 5)
+            if len(enemy_fighters) > 0:
+                if len(enemy_fighters) < rdmbullet:
+                    rdmbullet = randint(1, len(enemy_fighters))
+                for i in range(rdmbullet):
+                    rdmindex = randint(0, (len(enemy_fighters) -1))
+                    if len(enemy_fighters) == 1:
+                        rdmindex = 0
+                    enemybullets.append(enemyBullet( enemy_fighters[rdmindex].x + 35, enemy_fighters[rdmindex].y + 35))
+                rdmbullet = 0
+            counter = 90
             if len(enemy_fighters) < 8:
                 counter = 60
             if len(enemy_fighters) < 5:
@@ -266,15 +276,6 @@ def main():
                 counter = 40
             if len(enemy_fighters) == 1:
                 counter = 20
-            if len(enemy_fighters) < rdmbullet:
-                rdmbullet = randint(1, len(enemy_fighters))
-            if len(enemy_fighters) > 0:
-                for i in range(rdmbullet):
-                    rdmindex = randint(0, (len(enemy_fighters) -1))
-                    if len(enemy_fighters) == 1:
-                        rdmindex = 0
-                    enemybullets.append(enemyBullet( enemy_fighters[rdmindex].x + 35, enemy_fighters[rdmindex].y + 35))
-                rdmbullet = 0
 
         for ea_bullet in enemybullets:
 
@@ -293,19 +294,48 @@ def main():
         
         # enemy speed settings
         if len(enemy_fighters) == 8:
-            enemyspeed = 2
-        if len(enemy_fighters) == 4:
-            enemyspeed = 4
-        if len(enemy_fighters) == 1:
-            enemyspeed = 6
+            for ea_enemy in enemy_fighters:
+                enemyspeed = 2
+                if ea_enemy.xspeed > 0:
+                    ea_enemy.xspeed = 2
+                else:
+                    ea_enemy.xspeed = -2
+                    enemyspeed = 4
+        elif len(enemy_fighters) == 4:
+            for ea_enemy in enemy_fighters:
+                enemyspeed = 4
+                if ea_enemy.xspeed > 0:
+                    ea_enemy.xspeed = 4
+                else:
+                    ea_enemy.xspeed = -4
+        elif len(enemy_fighters) == 1:
+            for ea_enemy in enemy_fighters:
+                enemyspeed = 6
+                if ea_enemy.xspeed > 0:
+                    ea_enemy.xspeed = 6
+                if ea_enemy.xspeed < 0:
+                    ea_enemy.xspeed = -6
         for ea_enemy in enemy_fighters:
             if ea_enemy.x <= -10:
                 for ea_enemy in enemy_fighters:
                     ea_enemy.xspeed = -(enemyspeed)
+                    ea_enemy.x += 1
+                    ea_enemy.rect.x += 1
+                    ea_enemy.y += 6
+                    ea_enemy.rect.y += 6
+                    if len(enemy_fighters) == 1:
+                        ea_enemy.y += 6
+                        ea_enemy.rect.y += 6 
             if ea_enemy.x >= (width - 50):
                 for ea_enemy in enemy_fighters:
                     ea_enemy.xspeed = (enemyspeed)
-        
+                    ea_enemy.x -= 1
+                    ea_enemy.rect.x -= 1
+                    ea_enemy.y += 6
+                    ea_enemy.rect.y += 6
+                    if len(enemy_fighters) == 1:
+                        ea_enemy.y += 6
+                        ea_enemy.rect.y += 6 
         for ea_enemy in enemy_fighters:
             ea_enemy.rect.x -= ea_enemy.xspeed
             ea_enemy.x -= ea_enemy.xspeed
