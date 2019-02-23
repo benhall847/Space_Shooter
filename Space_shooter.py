@@ -364,7 +364,6 @@ def main():
         bulletgroup.draw(screen)
         enemybulletgroup.draw(screen)
         enemygroup.draw(screen)
-        print(counter)
         if len(player_list) == 0 and len(startlist) == 0:
             gameovergroup.draw(screen)
         if len(player_list) > 0:
