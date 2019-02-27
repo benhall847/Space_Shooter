@@ -17,7 +17,9 @@ and runs on nearly every platform and operating system.
 
 ### installation
 
-- First [install](https://www.pygame.org/wiki/GettingStarted) pygame into your terminal.
+- First [download and install python](https://www.python.org/downloads/) for your computer.
+
+- Second [install pygame](https://www.pygame.org/wiki/GettingStarted) into your terminal.
 
 - Then download and unzip Space_Shooter.
 
