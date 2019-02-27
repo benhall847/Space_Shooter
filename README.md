@@ -23,5 +23,5 @@ and runs on nearly every platform and operating system.
 
 - cd into the directory of Space_Shooter.
 
-- type into the terminal
+- type this into the terminal to run Space_Shooter.
 >python Space_Shooter.py
