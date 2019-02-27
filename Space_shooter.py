@@ -3,6 +3,7 @@ from random import randint
 import random
 import time
 
+# displays moving stars in the background.
 class Ball:
     def __init__(self, x, y, speed, radius):
         self.x = x
@@ -21,13 +22,16 @@ class Ball:
         if self.y > height:
             self.y = 0
 
-
+# the super class
 class unit(pygame.sprite.Sprite):
     def __init__(self, x, y):
         self.x = x
         self.y = y
         pygame.sprite.Sprite.__init__(self)
 
+
+
+# Clickable, game buttons.
 
 class startButton(unit):
     def __init__(self, x, y):
@@ -79,6 +83,10 @@ class PlayAgainButton(unit):
         self.rect.y = y
     def display(self):
         self.draw(screen)
+
+
+
+# Classes for each type of unit.
 
 class enemyBullet(unit):
     def __init__(self, x, y):
@@ -251,21 +259,25 @@ def main():
         playergroup.add(player1)
         player_list.append(player1)
 
+    # level 2 settings
     def level2():
         for z in range(0, 200, 80):
             for y in range(0, 400, 100):
                 enemy_fighters.append(enemy2(y, z, 2))
     
+    # level 3 settings
     def level3():
         for z in range(0, 160, 80):
             for y in range (0, 440, 110):
                 enemy_fighters.append(enemy3(y, z, 3))
 
+    # level 4 settings
     def level4():
         for z in range(0, 240, 80):
             for y in range (0, 440, 110):
                 enemy_fighters.append(enemy4(y, z, 3))
 
+    # level 5 settings
     def level5():
         for z in range(0, 200, 100):
             for y in range (0, 440, 110):
@@ -589,7 +601,7 @@ def main():
                 ea_player.rect.x = (width - 105)
 
 
-        # level initializer
+        # level 2 initializer
         if len(enemy_fighters) == 0 and level == 1:
             enemygroup = pygame.sprite.Group()
             bulletgroup = pygame.sprite.Group()
@@ -602,7 +614,8 @@ def main():
             counter = 120
             if len(player_list) > 0:
                 player_list[0].lives += 1
-        
+
+        # level 3 initializer
         if len(enemy_fighters) == 0 and level == 2:
             enemygroup = pygame.sprite.Group()
             bulletgroup = pygame.sprite.Group()
@@ -616,6 +629,7 @@ def main():
             if len(player_list) > 0:
                 player_list[0].lives += 1
         
+        # level 4 initializer
         if len(enemy_fighters) == 0 and level == 3:
             enemygroup = pygame.sprite.Group()
             bulletgroup = pygame.sprite.Group()
@@ -629,6 +643,7 @@ def main():
             if len(player_list) > 0:
                 player_list[0].lives += 1
         
+        # level 5 initializer
         if len(enemy_fighters) == 0 and level == 4:
             enemygroup = pygame.sprite.Group()
             bulletgroup = pygame.sprite.Group()
@@ -642,18 +657,18 @@ def main():
             if len(player_list) > 0:
                 player_list[0].lives += 1
         
-        for ball in ball_list:
-            ball.update(width, height)
-        
         
         # Draw background
+        
+        # black background
         screen.fill(black_color)
+        
+        # update background stars
         for ball in ball_list:
             ball.display(screen)
 
-        # Game display
 
-        # background
+        # Game display
         
         playergroup.draw(screen)
 
