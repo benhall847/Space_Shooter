@@ -9,11 +9,11 @@ and runs on nearly every platform and operating system.
 
 ## Space Shooter Features
 
-- object oriented programming.
+- Object Oriented Programming.
 
-- includes 5 levels, while easily expandable.
+- Includes 5 levels, while easily expandable.
 
-- both random and predefined enemy behavior.
+- Both random and predefined enemy behavior.
 
 ### Installation
 
@@ -25,5 +25,5 @@ and runs on nearly every platform and operating system.
 
 - Using your terminal, cd into the directory of Space_Shooter.
 
-- type this into the terminal to run Space_Shooter.
+- Type this into the terminal to run Space_Shooter.
 >python Space_Shooter.py
