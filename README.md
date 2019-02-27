@@ -21,7 +21,7 @@ and runs on nearly every platform and operating system.
 
 - Then download and unzip Space_Shooter.
 
-- cd into the directory of Space_Shooter.
+- Using your terminal, cd into the directory of Space_Shooter.
 
 - type this into the terminal to run Space_Shooter.
 >python Space_Shooter.py
