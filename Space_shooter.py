@@ -129,7 +129,7 @@ class enemies(unit):
 class enemy2(enemies):
     def __init__(self, x, y, health):
         enemies.__init__(self, x, y, health)
-        self.image = pygame.image.load("./Space_images/enemy2.png")
+        self.image = pygame.image.load("./Space_images/Enemies/enemy2.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -137,7 +137,7 @@ class enemy2(enemies):
 class enemy(enemies):
     def __init__(self, x, y, health):
         enemies.__init__(self, x, y, health)
-        self.image = pygame.image.load("./Space_images/MyEnemy.png")
+        self.image = pygame.image.load("./Space_images/Enemies/MyEnemy.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
