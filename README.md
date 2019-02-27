@@ -2,7 +2,7 @@
 >This is my python game created using [pygame](https://www.pygame.org/).
 
 ## About PyGame
-is a Free and Open Source python programming language library for making multimedia applications<br />
+Pygame is a Free and Open Source python programming language library for making multimedia applications<br />
 like games built on top of the excellent SDL library. Like SDL, pygame is highly portable <br />
 and runs on nearly every platform and operating system.
 
