@@ -15,7 +15,7 @@ and runs on nearly every platform and operating system.
 
 - both random and predefined enemy behavior.
 
-### installation
+### Installation
 
 - First [download and install python](https://www.python.org/downloads/) for your computer.
 
