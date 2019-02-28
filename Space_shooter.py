@@ -11,16 +11,13 @@ class Ball:
         self.speed = speed
         self.radius = radius
 
-    def display(self, screen):
-        pygame.draw.circle(screen, (255, 255, 255), (self.x, self.y), self.radius)
-
-    def update(self, width, height):
-        self.x = self.x
+    def update(self, height):
         self.y += self.speed
-        if self.x > width:
-            self.x = 0
         if self.y > height:
             self.y = 0
+
+    def display(self, screen):
+        pygame.draw.circle(screen, (255, 255, 255), (self.x, self.y), self.radius)
 
 # the super class
 class unit(pygame.sprite.Sprite):
@@ -173,12 +170,10 @@ class enemy5(enemies):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-
-
-
-
     def display(self):
             screen.blit(self.image, (self.x, self.y))
+
+
 
         # Game initialization
 def main():
@@ -665,12 +660,13 @@ def main():
         
         # update background stars
         for ball in ball_list:
-            ball.display(screen)
-
+            ball.update(height)
 
         # Game display
         
         playergroup.draw(screen)
+        for ball in ball_list:
+            ball.display(screen)
 
         if len(startlist) > 0:
             screen.blit(startscreen, (0,0))
