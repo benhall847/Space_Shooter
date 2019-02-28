@@ -1,7 +1,7 @@
 #  Space Shooter 
 >This is my python game created using [pygame](https://www.pygame.org/).
 
-> ![](SpaceGif.gif)
+![](SpaceGif.gif)
 
 ## About PyGame
 Pygame is a Free and Open Source python programming language library for making multimedia applications<br />
