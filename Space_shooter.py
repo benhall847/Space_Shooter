@@ -33,7 +33,7 @@ class unit(pygame.sprite.Sprite):
 class startButton(unit):
     def __init__(self, x, y):
         unit.__init__(self, x, y)
-        self.image = pygame.image.load("./Space_images/STARTBUTTON.png").convert()
+        self.image = pygame.image.load("Space_images/STARTBUTTON.png").convert()
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -43,7 +43,7 @@ class startButton(unit):
 class RetryButton(unit):
     def __init__(self, x, y):
         unit.__init__(self,x, y)
-        self.image = pygame.image.load("./Space_images/TRYAGAIN.png")
+        self.image = pygame.image.load("Space_images/TRYAGAIN.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -54,7 +54,7 @@ class RetryButton(unit):
 class gameover(unit):
     def __init__(self, x, y):
         unit.__init__(self, x, y)
-        self.image = pygame.image.load("./Space_images/GAMEOVER.png")
+        self.image = pygame.image.load("Space_images/GAMEOVER.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -64,7 +64,7 @@ class gameover(unit):
 class playerWIN(unit):
     def __init__(self, x, y):
         unit.__init__(self, x, y)
-        self.image = pygame.image.load("./Space_images/WIN.png")
+        self.image = pygame.image.load("Space_images/WIN.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -74,7 +74,7 @@ class playerWIN(unit):
 class PlayAgainButton(unit):
     def __init__(self, x, y):
         unit.__init__(self,x, y)
-        self.image = pygame.image.load("./Space_images/PLAYAGAIN.png")
+        self.image = pygame.image.load("Space_images/PLAYAGAIN.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -90,7 +90,7 @@ class enemyBullet(unit):
         unit.__init__(self, x, y)
         self.dead = False
         self.speed = 8
-        self.image = pygame.image.load("./Space_images/enemybullet.png")
+        self.image = pygame.image.load("Space_images/enemybullet.png")
         self.dead = False
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -104,7 +104,7 @@ class Hero(unit):
         self.rspeed = 0
         self.lives = 3
         self.lspeed = 0
-        self.image = pygame.image.load("./Space_images/myhero.png")
+        self.image = pygame.image.load("Space_images/myhero.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -115,7 +115,7 @@ class bullet(unit):
     def __init__(self, x, y):
         unit.__init__(self, x, y)
         self.speed = 10
-        self.image = pygame.image.load("./Space_images/MyBullet.png")
+        self.image = pygame.image.load("Space_images/MyBullet.png")
         self.dead = False
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -134,7 +134,7 @@ class enemies(unit):
 class enemy2(enemies):
     def __init__(self, x, y, health):
         enemies.__init__(self, x, y, health)
-        self.image = pygame.image.load("./Space_images/Enemies/enemy2.png")
+        self.image = pygame.image.load("Space_images/Enemies/enemy2.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -142,7 +142,7 @@ class enemy2(enemies):
 class enemy(enemies):
     def __init__(self, x, y, health):
         enemies.__init__(self, x, y, health)
-        self.image = pygame.image.load("./Space_images/Enemies/MyEnemy.png")
+        self.image = pygame.image.load("Space_images/Enemies/MyEnemy.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -150,7 +150,7 @@ class enemy(enemies):
 class enemy3(enemies):
     def __init__(self, x, y, health):
         enemies.__init__(self, x, y, health)
-        self.image = pygame.image.load("./Space_images/Enemies/enemyBlack3.png")
+        self.image = pygame.image.load("Space_images/Enemies/enemyBlack3.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -158,7 +158,7 @@ class enemy3(enemies):
 class enemy4(enemies):
     def __init__(self, x, y, health):
         enemies.__init__(self, x, y, health)
-        self.image = pygame.image.load("./Space_images/Enemies/enemyRed2.png")
+        self.image = pygame.image.load("Space_images/Enemies/enemyRed2.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -166,7 +166,7 @@ class enemy4(enemies):
 class enemy5(enemies):
     def __init__(self, x, y, health):
         enemies.__init__(self, x, y, health)
-        self.image = pygame.image.load("./Space_images/Enemies/enemyBlue4.png")
+        self.image = pygame.image.load("Space_images/Enemies/enemyBlue4.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -183,9 +183,9 @@ def main():
     height = 500
 
     pygame.display.set_caption('Space Shooter')
-    startscreen = pygame.image.load("./Space_images/SpaceShooterStartpage.png")
+    startscreen = pygame.image.load("Space_images/SpaceShooterStartpage.png")
     screen = pygame.display.set_mode((width, height))
-    WINscreen = pygame.image.load("./Space_images/WIN.png")
+    WINscreen = pygame.image.load("Space_images/WIN.png")
     
     # creating lists for each type of instance
     ball_list = []
