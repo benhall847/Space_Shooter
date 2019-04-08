@@ -1,5 +1,5 @@
 #  Space Shooter 
->This is my python game created using [pygame](https://www.pygame.org/).
+>This is a Space Shooter game created in Python using the [pygame](https://www.pygame.org/) Python library.
 
 ![](SpaceGif.gif)
 
